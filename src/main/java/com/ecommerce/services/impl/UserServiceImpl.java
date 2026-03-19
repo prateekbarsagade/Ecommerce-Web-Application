@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.entities.User;
@@ -21,15 +22,20 @@ import jakarta.transaction.Transactional;
 public class UserServiceImpl implements UserService{
 	
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository , BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
 
         User user = UserMapper.mapToEntity(userDTO);
+        
+     // Encrypt password
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         
      // set additional fields
         user.setCreatedAt(LocalDateTime.now());
