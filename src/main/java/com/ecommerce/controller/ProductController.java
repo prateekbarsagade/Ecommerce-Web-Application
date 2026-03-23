@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.entities.Product;
+import com.ecommerce.payloads.PageResponse;
 import com.ecommerce.payloads.ProductDTO;
 import com.ecommerce.services.ProductService;
 
@@ -49,13 +51,19 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    // GET ALL PRODUCTS
-    @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    @GetMapping("/api/products")
+    public ResponseEntity<PageResponse<ProductDTO>> getAllProducts(
+    		@RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<ProductDTO> products = productService.getAllProducts();
+    	
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
 
-        return ResponseEntity.ok(products);
+        PageResponse<ProductDTO> response = productService.getAllProducts(keyword , page, size);
+
+        return ResponseEntity.ok(response);
     }
 
     // UPDATE PRODUCT

@@ -9,6 +9,7 @@ import com.ecommerce.entities.Category;
 import com.ecommerce.entities.Product;
 import com.ecommerce.exceptions.ResourceNotFoundException;
 import com.ecommerce.mapper.ProductMapper;
+import com.ecommerce.payloads.PageResponse;
 import com.ecommerce.payloads.ProductDTO;
 import com.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.repositories.ProductRepository;
@@ -108,6 +109,49 @@ public class ProductServiceImpl implements ProductService {
         }
 
         productRepository.delete(productId);
+    }
+
+    @Override
+    public PageResponse<ProductDTO> getAllProducts(String keyword, int page, int size) {
+
+        // Basic validation (optional)
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        List<Product> products;
+        long totalElements;
+
+        // Decide: search or normal
+        if (keyword != null && !keyword.trim().isEmpty()) {
+
+            // Search + Pagination
+            products = productRepository.searchProducts(keyword, page, size);
+            totalElements = productRepository.countSearchProducts(keyword);
+
+        } else {
+
+            //  Normal Pagination
+            products = productRepository.findAllWithPagination(page, size);
+            totalElements = productRepository.countAllProducts();
+        }
+
+        //  Convert Entity → DTO
+        List<ProductDTO> productDTOs = products.stream()
+                .map(ProductMapper::mapToDTO)
+                .toList();
+
+        // Calculate total pages
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+
+        // Build response
+        PageResponse<ProductDTO> response = new PageResponse<>();
+        response.setContent(productDTOs);
+        response.setPage(page);
+        response.setSize(size);
+        response.setTotalElements(totalElements);
+        response.setTotalPages(totalPages);
+
+        return response;
     }
 
 }

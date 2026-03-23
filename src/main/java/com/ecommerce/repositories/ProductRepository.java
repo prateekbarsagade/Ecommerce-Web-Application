@@ -38,5 +38,49 @@ public class ProductRepository {
             entityManager.remove(product);
         }
     }
+	
+	public List<Product> findAllWithPagination(int page, int size) {
+
+	    int offset = page * size;
+
+	    String jpql = "SELECT p FROM Product p";
+
+	    return entityManager.createQuery(jpql, Product.class)
+	            .setFirstResult(offset)   // OFFSET
+	            .setMaxResults(size)      // LIMIT
+	            .getResultList();
+	}
+	
+	public long countAllProducts() {
+
+	    String jpql = "SELECT COUNT(p) FROM Product p";
+
+	    return entityManager.createQuery(jpql, Long.class)
+	            .getSingleResult();
+	}
+	
+	public List<Product> searchProducts(String keyword, int page, int size) {
+
+	    int offset = page * size;
+
+	    String jpql = "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:keyword)";
+
+	    return entityManager.createQuery(jpql, Product.class)
+	            .setParameter("keyword", "%" + keyword + "%") 
+	            .setFirstResult(offset)  // OFFSET
+	            .setMaxResults(size)     // LIMIT
+	            .getResultList();
+	}
+	
+	public long countSearchProducts(String keyword) {
+
+	    String jpql = "SELECT COUNT(p) FROM Product p WHERE LOWER(p.name) LIKE LOWER(:keyword)";
+
+	    return entityManager.createQuery(jpql, Long.class)
+	            .setParameter("keyword", "%" + keyword + "%")
+	            .getSingleResult();
+	}
+	
+	
 
 }
