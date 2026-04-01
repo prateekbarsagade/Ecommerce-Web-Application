@@ -45,4 +45,11 @@ public class OrderRepository {
         return entityManager.createQuery(jpql, Order.class)
                 .getResultList();
     }
+    
+    public Order findByRazorpayOrderId(String razorpayOrderId) {
+        String jpql = "SELECT o FROM Order o WHERE o.razorpayOrderId = :id";
+        return entityManager.createQuery(jpql, Order.class)
+                .setParameter("id", razorpayOrderId)
+                .getSingleResult();
+    }
 }

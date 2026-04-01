@@ -45,7 +45,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(cart.getUser());
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("PLACED");
+        order.setStatus("PENDING");
+        order.setPaymentStatus("PENDING");
         order.setShippingAddress(request.getShippingAddress());
 
         List<OrderItem> orderItems = new ArrayList<>();

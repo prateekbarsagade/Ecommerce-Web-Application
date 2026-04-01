@@ -27,6 +27,8 @@ public class ProductDTO {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
+    
+    private String imageUrl;
 
 	public ProductDTO() {
 		super();
@@ -37,7 +39,7 @@ public class ProductDTO {
 			@NotBlank(message = "Description is required") String description,
 			@Positive(message = "Price must be greater than zero") Double price,
 			@Positive(message = "Stock quantity must be positive") Integer stockQuantity,
-			@NotNull(message = "Category ID is required") Long categoryId) {
+			@NotNull(message = "Category ID is required") Long categoryId, String imageUrl) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -45,7 +47,10 @@ public class ProductDTO {
 		this.price = price;
 		this.stockQuantity = stockQuantity;
 		this.categoryId = categoryId;
+		this.imageUrl = imageUrl;
 	}
+
+	
 
 	public Long getId() {
 		return id;
@@ -93,6 +98,14 @@ public class ProductDTO {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
     
     

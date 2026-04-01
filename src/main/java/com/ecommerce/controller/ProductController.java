@@ -51,11 +51,11 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @GetMapping("/api/products")
+    @GetMapping
     public ResponseEntity<PageResponse<ProductDTO>> getAllProducts(
-    		@RequestParam(required = false) String keyword,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    		@RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
 
     	
         if (page < 0) page = 0;

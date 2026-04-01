@@ -19,6 +19,10 @@ public class Order {
     private String status;
 
     private String shippingAddress;
+    
+    private String paymentStatus;      
+    private String paymentId;          
+    private String razorpayOrderId;  
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -27,7 +31,8 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<OrderItem> orderItems;
 
-	public Order(Long id, LocalDateTime orderDate, double totalAmount, String status, String shippingAddress, User user,
+	public Order(Long id, LocalDateTime orderDate, double totalAmount, String status, String shippingAddress,String paymentStatus, String paymentId,
+            String razorpayOrderId, User user,
 			List<OrderItem> orderItems) {
 		super();
 		this.id = id;
@@ -35,6 +40,9 @@ public class Order {
 		this.totalAmount = totalAmount;
 		this.status = status;
 		this.shippingAddress = shippingAddress;
+		this.paymentStatus = paymentStatus;
+        this.paymentId = paymentId;
+        this.razorpayOrderId = razorpayOrderId;
 		this.user = user;
 		this.orderItems = orderItems;
 	}
@@ -100,6 +108,29 @@ public class Order {
 		this.orderItems = orderItems;
 	}
     
+	public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getRazorpayOrderId() {
+        return razorpayOrderId;
+    }
+
+    public void setRazorpayOrderId(String razorpayOrderId) {
+        this.razorpayOrderId = razorpayOrderId;
+    }
     
     
 

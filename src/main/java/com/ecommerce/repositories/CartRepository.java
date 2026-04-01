@@ -28,7 +28,7 @@ public class CartRepository {
     }
 
     public Cart findByUserId(Long userId) {
-        String jpql = "SELECT c FROM Cart c WHERE c.user.id = :userId";
+    	String jpql = "SELECT c FROM Cart c JOIN FETCH c.cartItems WHERE c.user.id = :userId";
         return entityManager.createQuery(jpql, Cart.class)
                 .setParameter("userId", userId)
                 .getSingleResult();
